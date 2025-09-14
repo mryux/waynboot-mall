@@ -23,8 +23,9 @@ spring:
   boot:
     admin:
       client:
-        url: http://127.0.0.1:89/boot-admin
-
+        url: http://monitor:89/boot-admin
+        username: admin
+        password: admin
 
 # token配置
 token:
@@ -73,5 +74,5 @@ wayn:
   version: 1.3.0
   email: 166738430@qq.com
   uploadDir: ${UPLOAD_DIR:D:/waynshop/webp}
-  adminUrl: http://localhost:81
-  mobileUrl: http://localhost:82
+  adminUrl: http://admin:81
+  mobileUrl: http://mobile:82

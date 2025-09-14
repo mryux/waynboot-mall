@@ -35,3 +35,9 @@ mvnw*
 .gradle
 
 jars/
+mysql/
+rabbitmq/
+es/plugins
+es/data
+nginx/log
+redis/data

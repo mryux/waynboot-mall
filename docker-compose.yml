@@ -8,7 +8,7 @@ services:
       - /home/logs:/home/logs
       - /opt/waynboot-mall/upload:/opt/waynboot-mall/upload
       - ./jars/waynboot-mobile-api.jar:/home/app/waynboot-mobile-api.jar
-    restart: always
+    restart: unless-stopped
     command: java -Xms512m -Xmx512m -Duser.timezone=GMT+8 -Dfile.encoding=utf-8 -jar /home/app/waynboot-mobile-api.jar
     ports:
       - "82:82"
@@ -16,7 +16,9 @@ services:
       - TZ=Asia/Shanghai
       - LOG_PATH_PREFIX=/home/logs
       - UPLOAD_DIR=/opt/waynboot-mall/upload
-    network_mode: "host"
+    networks:
+      - waynboot-mall_mall-network
+
   admin:
     image: ibm-semeru-runtimes:open-17-jdk
     container_name: admin
@@ -25,7 +27,7 @@ services:
       - /home/logs:/home/logs
       - /opt/waynboot-mall/upload:/opt/waynboot-mall/upload
       - ./jars/waynboot-admin-api.jar:/home/app/waynboot-admin-api.jar
-    restart: always
+    restart: unless-stopped  
     command: java -Xms512m -Xmx512m -Duser.timezone=GMT+8 -Dfile.encoding=utf-8 -jar /home/app/waynboot-admin-api.jar
     ports:
       - "81:81"
@@ -33,7 +35,9 @@ services:
       - TZ=Asia/Shanghai
       - LOG_PATH_PREFIX=/home/logs
       - UPLOAD_DIR=/opt/waynboot-mall/upload
-    network_mode: "host"
+    networks:
+      - waynboot-mall_mall-network
+
   message:
     image: ibm-semeru-runtimes:open-17-jdk
     container_name: message
@@ -42,32 +46,36 @@ services:
       - /home/logs:/home/logs
       - /opt/waynboot-mall/upload:/opt/waynboot-mall/upload
       - ./jars/waynboot-message-consumer.jar:/home/app/waynboot-message-consumer.jar
-    restart: always
+    restart: unless-stopped
     command: java -Xms512m -Xmx512m -Duser.timezone=GMT+8 -Dfile.encoding=utf-8 -jar /home/app/waynboot-message-consumer.jar
-    ports:
-      - "85:85"
+    expose:
+      - "85"
     environment:
       - TZ=Asia/Shanghai
       - LOG_PATH_PREFIX=/home/logs
       - UPLOAD_DIR=/opt/waynboot-mall/upload
-    network_mode: "host"
+    networks:
+      - waynboot-mall_mall-network
+
   monitor:
     image: ibm-semeru-runtimes:open-17-jdk
-    container_name: boot-admin
+    container_name: monitor
     volumes:
       - /etc/localtime:/etc/localtime
       - ./jars/waynboot-monitor.jar:/home/app/waynboot-monitor.jar
-    restart: always
+    restart: unless-stopped
     command: java -Xms512m -Xmx512m -Duser.timezone=GMT+8 -Dfile.encoding=utf-8 -jar /home/app/waynboot-monitor.jar
-    ports:
-      - "89:89"
+    expose:
+      - "89"
     environment:
       - TZ=Asia/Shanghai
-    network_mode: "host"
+    networks:
+      - waynboot-mall_mall-network
+
   nginx:
     container_name: "nginx"
     image: nginx:latest
-    restart: always
+    restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
@@ -80,4 +88,9 @@ services:
       - ./nginx/log:/var/log/nginx/
       - ./front/mall:/usr/share/nginx/html/mall/
       - ./front/admin:/usr/share/nginx/html/admin/
-    network_mode: "host"
+    networks:
+      - waynboot-mall_mall-network
+
+networks:
+  waynboot-mall_mall-network:
+    external: true

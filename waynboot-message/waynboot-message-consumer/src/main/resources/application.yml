@@ -6,7 +6,7 @@ spring:
     name: waynboot-message-consumer
   data:
     redis:
-      host: 127.0.0.1
+      host: redis
       port: 6379
       password:
       database: 0
@@ -16,7 +16,7 @@ spring:
         shutdown-timeout: 100ms
   # 配置rabbitMq 服务器
   rabbitmq:
-    host: 127.0.0.1
+    host: rabbitmq
     port: 5672
     username: guest
     password: guest
@@ -40,8 +40,10 @@ spring:
   boot:
     admin:
       client:
-        url: http://localhost:89/boot-admin
-
+        url: http://monitor:89/boot-admin
+        username: admin
+        password: admin
+        
 # 日志配置
 logging:
   level:
