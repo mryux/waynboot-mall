@@ -64,7 +64,7 @@ wayn:
   name: wayn
   version: 1.3.0
   email: 166738430@qq.com
-  uploadDir: ${UPLOAD_DIR:D:/waynshop/webp}
+  uploadDir: ${UPLOAD_DIR:/opt/waynboot-mall/upload}
   adminUrl: ${ADMIN_URL:http://admin:81}
   mobileUrl: ${MOBILE_URL:http://mobile:82}
   freightLimit: "0"  # 运费限额
